@@ -5,11 +5,29 @@ const getBooks = async () => {
   return boks;
 };
 
-// const deleteEvento = async (id) => {
-//   const consulta = "DELETE FROM eventos WHERE id = $1";
-//   const values = [id];
-//   const { rowCount } = await pool.query(consulta, values);
-//   if (!rowCount) throw { code: 404, message: "No se encontró ningún evento con este ID" };
-// };
+const verificarCredenciales = async (email, password) => {
+  const consulta = 'SELECT * FROM users WHERE email = $1 AND password = $2';
 
-module.exports = { getBooks };
+  console.log(consulta);
+
+  const valores = [email, password];
+
+  const { rowCount } = await pool.query(consulta, valores);
+  if (!rowCount)
+    throw {
+      code: 404,
+      message: 'No se encontro el usuario con estas credenciales',
+    };
+};
+
+const deleteEvento = async (id) => {
+  console.log('entro');
+  const consulta = 'DELETE FROM books WHERE id = $1';
+  const values = [id];
+  const { rowCount } = await pool.query(consulta, values);
+  console.log('rowCount', rowCount);
+  if (!rowCount)
+    throw { code: 404, message: 'No se encontró ningún libro con este ID' };
+};
+
+module.exports = { getBooks, verificarCredenciales, deleteEvento };
